@@ -1,0 +1,34 @@
+# AquaGuard (simple) - virtual IoT water sensors
+
+broker:
+  host: localhost
+  port: 1883
+  username: aquaguard     # MQTT login (change both, then restart)
+  password: aquaguard123
+
+# One sensor node per zone. Each node has a flow, pressure and water-level sensor.
+# flow / pressure = typical values at an average hour of the day.
+zones:
+  A: { name: Residential, flow: 100, pressure: 3.0, battery: 100, signal: -58 }
+  B: { name: Commercial,  flow: 80,  pressure: 3.2, battery: 90,  signal: -64 }
+  C: { name: Industrial,  flow: 120, pressure: 3.4, battery: 70,  signal: -70 }
+  D: { name: Hospital,    flow: 60,  pressure: 3.1, battery: 24,  signal: -83 }   # weak signal, low battery
+
+sensors:
+  interval_s: 1           # each node publishes once per second
+  noise_pct: 1.5          # random sensor noise
+  day_minutes: 10         # one simulated day (with morning/evening peaks) lasts 10 real minutes
+  battery_drain: 0.02     # % per reading
+  low_battery: 20         # warn below this %
+  weak_signal: -80        # dBm; weaker than this loses some readings
+
+physics:
+  friction: 0.15          # more flow = less pressure (pipe friction)
+
+detection:
+  flow_rise_pct: 10       # leak: flow above its learned normal by this much...
+  pressure_drop_pct: 8    # ...AND pressure below what that flow should give
+  confirm_readings: 3     # ...for this many readings in a row
+  learn_rate: 0.02        # how fast "normal" adapts to slow changes (daily pattern, settings)
+  stuck_readings: 6       # identical readings in a row = stuck sensor
+  max_pressure: 10        # anything outside 0..max is an impossible reading

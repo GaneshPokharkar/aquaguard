@@ -1,0 +1,9 @@
+# Built-in Python MQTT broker (amqtt), used only when Mosquitto isn't running.
+# Only users in broker_passwd may connect (run_all.py creates it from config.yaml).
+listeners:
+  default:
+    type: tcp
+    bind: 127.0.0.1:1883
+plugins:
+  amqtt.plugins.authentication.FileAuthPlugin:
+    password_file: broker_passwd

@@ -1,0 +1,7 @@
+paho-mqtt>=2.0
+streamlit>=1.40
+plotly>=5.20
+pandas>=2.0
+pyyaml>=6.0
+amqtt>=0.11      # built-in MQTT broker if Mosquitto isn't installed
+pytest>=8.0
